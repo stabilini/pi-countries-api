@@ -16,7 +16,7 @@ server.name = 'API';
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
-// server.use(morgan('dev'));
+server.use(morgan('dev'));
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'https://pi-countries-client-production-08bf.up.railway.app'); // * para aceptar conexiones de cualquier lado
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -28,25 +28,48 @@ server.use((req, res, next) => {
 
 // obtiene los datos de la API y los guarda en la DB, solo se ejecuta al levantar el back
 // VER FRANCO 12 REACT REDUX 46.33 DEL LECTURE QUE EXPLICA ALGO DE AXIOS (para sacar el let countries = data.data)
-axios
-  .get('https://restcountries.com/v3.1/all')
-  .then(data => {
-    let bulk = data.data.map(c => ({
-      id: c.cca3,
-      name: c.name.common,
-      flag: c.flags.png,
-      continent: c.continents[0],
-      capital: c.capital ? c.capital[0] : 'n/d',
-      subregion: c.subregion ? c.subregion : 'n/d',
-      area: c.area >= 0 ? c.area : 0,
-      population: c.population >= 0 ? c.population : 0
-    }))
-    Country.bulkCreate(bulk);
-  })
-  .then(console.log('Countries loaded from external API.'))
-  .catch(error => {
-    console.log(error);
-  });
+async function preloadCountries() {
+  let test = await Country.findAll({});
+  if (test.length === 0) {
+  axios
+    .get('https://restcountries.com/v3.1/all')
+    // .then(data => {
+    //   let countries = data.data;
+      
+    //   for (let i = 0; i < 10; i++) {
+    //     Country.create({
+    //       id: countries[i].cca3,
+    //       name: countries[i].name.common,
+    //       flag: countries[i].flags.png,
+    //       continent: countries[i].continents[0],
+    //       capital: countries[i].capital ? countries[i].capital[0] : 'n/d',
+    //       subregion: countries[i].subregion ? countries[i].subregion : 'n/d',
+    //       area: countries[i].area >= 0 ? countries[i].area : 0,
+    //       population: countries[i].population >= 0 ? countries[i].population : 0,
+    //     });
+    //   }
+      
+    // })
+    .then(data => {
+      let bulk = data.data.map(c => ({
+        id: c.cca3,
+        name: c.name.common,
+        flag: c.flags.png,
+        continent: c.continents[0],
+        capital: c.capital ? c.capital[0] : 'n/d',
+        subregion: c.subregion ? c.subregion : 'n/d',
+        area: c.area >= 0 ? c.area : 0,
+        population: c.population >= 0 ? c.population : 0
+      }))
+      Country.bulkCreate(bulk);
+    })
+    .then(console.log('Countries loaded from external API.'))
+    .catch(error => {
+      console.log(error);
+    });
+  }
+}
+preloadCountries();
 
 server.use('/', routes);
 
