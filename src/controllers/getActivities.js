@@ -1,10 +1,11 @@
-const { Country, Activity } = require("../db.js");
+const { Country, Activity } = require('../db.js');
 
 const getActivities = async (req, res) => {
   try {
     let result = await Activity.findAll();
     let act = {}
-
+    if(result.length === 0) return res.status(200).json({});
+    
     for (let i = 0; i < result.length; i++) {
       let key = result[i].name;
       act[key] = true;

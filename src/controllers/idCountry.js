@@ -1,4 +1,4 @@
-const { Country, Activity } = require("../db.js");
+const { Country, Activity } = require('../db.js');
 
 const findByIdCountry = async (req, res) => {
   try {
@@ -9,6 +9,7 @@ const findByIdCountry = async (req, res) => {
       },
       include: Activity
     });
+    if(result.length === 0) return res.status(404).json({msg: 'No countries'});
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({err: 'Conection to DB failed.', error})

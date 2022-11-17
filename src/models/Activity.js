@@ -24,6 +24,10 @@ module.exports = (sequelize) => {
     duration: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        min: 1,
+        max: 60,
+      },
     },
     season: {
       type: DataTypes.ENUM('Summer', 'Autumn', 'Winter', 'Spring'),
