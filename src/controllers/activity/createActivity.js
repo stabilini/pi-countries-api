@@ -1,4 +1,4 @@
-const { Activity } = require('../db.js');
+const { Activity } = require('../../db.js');
 
 const createActivity = async (req, res) => {
   let { name, skill, duration, season, countries } = req.body;

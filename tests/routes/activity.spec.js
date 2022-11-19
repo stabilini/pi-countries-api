@@ -46,6 +46,7 @@ describe('Activity routes', () => {
     console.error('Unable to connect to the database:', err);
   }));
   before(() => Activity.sync({ force: true })
+    .then(() => Country.sync({ force: true }))
     .then(() => Country.create(country1))
     .then(() => Country.create(country2))
     .then(() => Activity.create(activity1))
