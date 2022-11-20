@@ -4,16 +4,15 @@ const getActivities = async (req, res) => {
   try {
     let result = await Activity.findAll();
     let act = {}
-    if(result.length === 0) return res.status(200).json({});
+    if(result.length === 0) return res.status(200).json({status: 'ok', msg: 'No activities.', data: act});
     
     for (let i = 0; i < result.length; i++) {
       let key = result[i].name;
       act[key] = true;
     }
-    // let act = {"Paseo": true, "Golf": true, "Perrreo": true, "Caminata": true, "Comilona": true, "Pesca": true, "Teatro": true, "Robar": true}
-    res.status(200).json(act);
+    res.status(200).json({status: 'ok', msg: 'Retrieving activities.', data: act});
   } catch (error) {
-    res.status(500).json({err: 'Conection to DB failed.', error})
+    res.status(500).json({status: 'error', msg: 'Conection to DB failed.', data: error})
   } 
 };
 

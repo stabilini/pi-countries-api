@@ -20,6 +20,7 @@ module.exports = (sequelize) => {
         min: 1,
         max: 5,
       },
+      defaultValue: 1
     },
     duration: {
       type: DataTypes.INTEGER,
@@ -28,9 +29,11 @@ module.exports = (sequelize) => {
         min: 1,
         max: 60,
       },
+      defaultValue: 1
     },
     season: {
       type: DataTypes.ENUM('Summer', 'Autumn', 'Winter', 'Spring'),
+      defaultValue: "Winter"
     },
   });
 };

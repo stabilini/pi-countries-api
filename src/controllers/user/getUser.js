@@ -17,14 +17,14 @@ const getUser = async (req, res) => {
           ]
         }
       });
-      if(result.length === 0) return res.status(404).json({msg: 'Invalid user credentials'});
+      if(result.length === 0) return res.status(400).json({status: 'error', msg: 'Invalid user credentials.', data: []});
     } else {
       result = await User.findAll();
-      if(result.length === 0) return res.status(404).json({msg: 'No users'})
+      if(result.length === 0) return res.status(200).json({status: 'ok', msg: 'No users.', data: []})
     }
-    res.status(200).json(result);
+    res.status(200).json({status: 'ok', msg: 'Retrieving users.', data: result});
   } catch (error) {
-    res.status(500).json({err: 'Conection to DB failed.', error})
+    res.status(500).json({status: 'error', msg: 'Conection to DB failed.', data: error})
   }
 };
 
