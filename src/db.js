@@ -4,12 +4,13 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
-const {
-  DB_USER, DB_PASSWORD, DB_HOST, DEPLOY
-} = process.env;
+// DEPLOY USAR SIGUIENTE LINEA (DEBE ESTAR CARGADO EL .ENV EN EL HOSTING)
+const { DEPLOY } = process.env;
+// DEVELOPMENTE USAR SIGUIENTE LINEA
+// const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 // DEPLOY USAR SIGUIENTE LINEA (DEBE ESTAR CARGADO EL .ENV EN EL HOSTING)
-const sequelize = new Sequelize('postgres://nico:b8SBQQWhWWzTqYyWM35KZ40nMJzLeksi@dpg-cdorkh6n6mpuqrtqgq7g-a.oregon-postgres.render.com/countries_vbuc', {
+const sequelize = new Sequelize(DEPLOY, {
 // DEVELOPMENTE USAR SIGUIENTE LINEA
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/countries`, {
   logging: false, // set to console.log to see the raw SQL queries
