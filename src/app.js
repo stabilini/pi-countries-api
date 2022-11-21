@@ -35,22 +35,22 @@ async function preloadCountries() {
   axios
     .get('https://restcountries.com/v3.1/all')
     .then(data => {
-      let bulk = data.data.map(c => ({
-        id: c.cca3,
-        name: c.name.common,
-        flag: c.flags.png,
-        continent: c.continents[0],
-        capital: c.capital ? c.capital[0] : 'n/d',
-        subregion: c.subregion ? c.subregion : 'n/d',
-        area: c.area >= 0 ? c.area : 0,
-        population: c.population >= 0 ? c.population : 0
-      }))
-      Country.bulkCreate(bulk);
+      let countries = data.data;
+      
+      for (let i = 0; i < 10; i++) {
+        Country.create({
+          id: countries[i].cca3,
+          name: countries[i].name.common,
+          flag: countries[i].flags.png,
+          continent: countries[i].continents[0],
+          capital: countries[i].capital ? countries[i].capital[0] : 'n/d',
+          subregion: countries[i].subregion ? countries[i].subregion : 'n/d',
+          area: countries[i].area >= 0 ? countries[i].area : 0,
+          population: countries[i].population >= 0 ? countries[i].population : 0,
+        });
+      }
+      
     })
-    .then(console.log('Countries loaded from external API.'))
-    .catch(error => {
-      console.log(error);
-    });
   }
 }
 preloadCountries();
