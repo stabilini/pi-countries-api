@@ -10,7 +10,7 @@ const createActivity = async (req, res) => {
     if (!name || !skill || !duration || !season) return res.status(400).json({status: 'error', msg: 'Missing parameters.', data: []})
     if (skill < 0 || skill > 5) return res.status(400).json({status: 'error', msg: 'Invalid skill value.', data: []})
     if (duration < 1 || duration > 60) return res.status(400).json({status: 'error', msg: 'Invalid duration value.', data: []})
-    if (!['Winter', 'Spring', 'Summer', 'Autumn'].includes(season)) return res.status(400).json({status: 'error', msg: 'Invalid season value.', data: [ ]})
+    if (!['Winter', 'Spring', 'Summer', 'Autumn'].includes(season)) return res.status(400).json({status: 'error', msg: 'Invalid season value.', data: []})
     let result = await Activity.create({
       name: name,
       skill: skill,

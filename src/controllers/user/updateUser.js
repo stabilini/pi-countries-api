@@ -3,8 +3,8 @@ var crypto = require('crypto');
 const { User } = require('../../db.js');
 
 const updateUser = async (req, res) => {
-  let { mail, pass } = req.body;
   try {
+    let { mail, pass } = req.body;
     if (mail && pass) {
       let hashedpass = crypto.createHash('md5').update(pass).digest('hex');
       let result = await User.update({ pass: hashedpass }, {
