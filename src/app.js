@@ -29,31 +29,31 @@ server.use((req, res, next) => {
 });
 
 // --- CODIGO SOLO PARA DEPLOY ---
-async function preloadCountries() {
-  let test = await Country.findAll({});
-  if (test.length === 0) {
-  axios
-    .get('https://restcountries.com/v3.1/all')
-    .then(data => {
-      let countries = data.data;
+// async function preloadCountries() {
+//   let test = await Country.findAll({});
+//   if (test.length === 0) {
+//   axios
+//     .get('https://restcountries.com/v3.1/all')
+//     .then(data => {
+//       let countries = data.data;
       
-      for (let i = 0; i < 10; i++) {
-        Country.create({
-          id: countries[i].cca3,
-          name: countries[i].name.common,
-          flag: countries[i].flags.png,
-          continent: countries[i].continents[0],
-          capital: countries[i].capital ? countries[i].capital[0] : 'n/d',
-          subregion: countries[i].subregion ? countries[i].subregion : 'n/d',
-          area: countries[i].area >= 0 ? countries[i].area : 0,
-          population: countries[i].population >= 0 ? countries[i].population : 0,
-        });
-      }
+//       for (let i = 0; i < 10; i++) {
+//         Country.create({
+//           id: countries[i].cca3,
+//           name: countries[i].name.common,
+//           flag: countries[i].flags.png,
+//           continent: countries[i].continents[0],
+//           capital: countries[i].capital ? countries[i].capital[0] : 'n/d',
+//           subregion: countries[i].subregion ? countries[i].subregion : 'n/d',
+//           area: countries[i].area >= 0 ? countries[i].area : 0,
+//           population: countries[i].population >= 0 ? countries[i].population : 0,
+//         });
+//       }
       
-    })
-  }
-}
-preloadCountries();
+//     })
+//   }
+// }
+// preloadCountries();
 // --- FIN CODIGO SOLO PARA DEPLOY ---
 
 server.use('/', routes);
