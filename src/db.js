@@ -10,7 +10,7 @@ const { DEPLOY } = process.env;
 // const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 // DEPLOY USAR SIGUIENTE LINEA (DEBE ESTAR CARGADO EL .ENV EN EL HOSTING)
-const sequelize = new Sequelize('postgres://nico:b8SBQQWhWWzTqYyWM35KZ40nMJzLeksi@dpg-cdorkh6n6mpuqrtqgq7g-a.oregon-postgres.render.com/countries_vbuc', {
+const sequelize = new Sequelize(DEPLOY, {
 // DEVELOPMENTE USAR SIGUIENTE LINEA
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/countries`, {
   logging: false, // set to console.log to see the raw SQL queries
@@ -43,25 +43,26 @@ Country.belongsToMany(Activity, { through: 'country_activity'});
 Activity.belongsToMany(Country, { through: 'country_activity'});
 
 // Llamamos una sola vez a la API externa y guardamos todos los paises en la BD
-axios
-  .get('https://restcountries.com/v3.1/all')
-  .then(data => {
-    let bulk = data.data.map(c => ({
-      id: c.cca3,
-      name: c.name.common,
-      flag: c.flags.png,
-      continent: c.continents[0],
-      capital: c.capital ? c.capital[0] : 'n/d',
-      subregion: c.subregion ? c.subregion : 'n/d',
-      area: c.area >= 0 ? c.area : 0,
-      population: c.population >= 0 ? c.population : 0
-    }))
-    Country.bulkCreate(bulk);
-  })
-  .then(console.log('Countries loaded from external API.'))
-  .catch(error => {
-    console.log(error);
-  });
+// EN DEPLOY NO USAR LA CONEXION ACA, USARLA EN APP.JS
+// axios
+//   .get('https://restcountries.com/v3.1/all')
+//   .then(data => {
+//     let bulk = data.data.map(c => ({
+//       id: c.cca3,
+//       name: c.name.common,
+//       flag: c.flags.png,
+//       continent: c.continents[0],
+//       capital: c.capital ? c.capital[0] : 'n/d',
+//       subregion: c.subregion ? c.subregion : 'n/d',
+//       area: c.area >= 0 ? c.area : 0,
+//       population: c.population >= 0 ? c.population : 0
+//     }))
+//     Country.bulkCreate(bulk);
+//   })
+//   .then(console.log('Countries loaded from external API.'))
+//   .catch(error => {
+//     console.log(error);
+//   });
 
 
 module.exports = {
