@@ -4,6 +4,8 @@ const { Op } = require('sequelize');
 const getCountries = async (req, res) => {
   let { name } = req.query;
   let result;
+  // Para testear demora del servidor
+  // await new Promise(resolve => setTimeout(resolve, 1000));
   try {
     if (name) {
       result = await Country.findAll({

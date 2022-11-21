@@ -12,7 +12,7 @@ const findByIdCountry = async (req, res) => {
       },
       include: Activity
     });
-    if(result.length === 0) return res.status(404).json({status: 'error', msg: 'No country with that ID.', data: []});
+    if(result.length === 0) return res.status(200).json({status: 'error', msg: 'No country with that ID.', data: []});
     res.status(200).json({status: 'ok', msg: 'Retrieving country.', data: result});
   } catch (error) {
     res.status(500).json({status: 'error', msg: 'Conection to DB failed.', data: error})

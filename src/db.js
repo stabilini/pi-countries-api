@@ -1,19 +1,19 @@
 require('dotenv').config();
+const axios = require('axios');
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
+
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_DEPLOY
+  DB_USER, DB_PASSWORD, DB_HOST, DEPLOY
 } = process.env;
 
-const sequelize = new Sequelize('postgresql://postgres:WNfvwkUwFaZIWRsyNyci@containers-us-west-127.railway.app:5941/railway', {
+// DEPLOY USAR SIGUIENTE LINEA (DEBE ESTAR CARGADO EL .ENV EN EL HOSTING)
+const sequelize = new Sequelize('postgres://nico:b8SBQQWhWWzTqYyWM35KZ40nMJzLeksi@dpg-cdorkh6n6mpuqrtqgq7g-a.oregon-postgres.render.com/countries_vbuc', {
+// DEVELOPMENTE USAR SIGUIENTE LINEA
+// const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/countries`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-  // dialectOptions: {
-  //   ssl: {
-  //     require: true
-  //   }
-  // }
 });
 const basename = path.basename(__filename);
 
@@ -40,6 +40,28 @@ const { Country, Activity } = sequelize.models;
 // Aca vendrian las relaciones
 Country.belongsToMany(Activity, { through: 'country_activity'});
 Activity.belongsToMany(Country, { through: 'country_activity'});
+
+// Llamamos una sola vez a la API externa y guardamos todos los paises en la BD
+axios
+  .get('https://restcountries.com/v3.1/all')
+  .then(data => {
+    let bulk = data.data.map(c => ({
+      id: c.cca3,
+      name: c.name.common,
+      flag: c.flags.png,
+      continent: c.continents[0],
+      capital: c.capital ? c.capital[0] : 'n/d',
+      subregion: c.subregion ? c.subregion : 'n/d',
+      area: c.area >= 0 ? c.area : 0,
+      population: c.population >= 0 ? c.population : 0
+    }))
+    Country.bulkCreate(bulk);
+  })
+  .then(console.log('Countries loaded from external API.'))
+  .catch(error => {
+    console.log(error);
+  });
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
