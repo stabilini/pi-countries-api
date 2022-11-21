@@ -10,7 +10,7 @@ const { DEPLOY } = process.env;
 // const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 // DEPLOY USAR SIGUIENTE LINEA (DEBE ESTAR CARGADO EL .ENV EN EL HOSTING)
-const sequelize = new Sequelize(DEPLOY, {
+const sequelize = new Sequelize('postgresql://postgres:WNfvwkUwFaZIWRsyNyci@containers-us-west-127.railway.app:5941/railway', {
 // DEVELOPMENTE USAR SIGUIENTE LINEA
 // const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/countries`, {
   logging: false, // set to console.log to see the raw SQL queries
