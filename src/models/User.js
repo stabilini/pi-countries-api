@@ -18,9 +18,9 @@ module.exports = sequelize => {
     pass: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        is: /^[0-9a-f]{32}$/i
-      }
+      // validate: {
+      //   is: /^[0-9a-f]{32}$/i
+      // }
     },
   });
 };
